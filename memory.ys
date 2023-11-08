@@ -1,0 +1,17 @@
+# Reading the library
+read_liberty -lib -ignore_miss_dir -setattr blackbox /home/kunalg/Desktop/work/openmsp430/openmsp430/osu018_stdcells.lib
+# Reading the verilog
+read_verilog verilog/memory.v
+synth top memory
+splitnets -ports -format ___
+dfflibmap -liberty /home/kunalg/Desktop/work/openmsp430/openmsp430/osu018_stdcells.lib
+opt
+abc -liberty /home/kunalg/Desktop/work/openmsp430/openmsp430/osu018_stdcells.lib
+flatten
+clean -purge
+opt
+clean
+# Writing the netlist
+write_verilog memory_synth.v
+# Representation of netlist with it's components
+show

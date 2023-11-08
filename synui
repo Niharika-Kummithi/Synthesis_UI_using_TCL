@@ -1,0 +1,66 @@
+#!/bin/bash
+echo 
+echo "   _|_|_|      _|      _|      _|_|      _|            _|      _|      _|_|_|_|_|_|_|   "
+echo "   _|            _|  _|        _| _|     _|            _|      _|            _|         "
+echo "   _|              _|          _|  _|    _|            _|      _|            _|         "
+echo "   _|_|_|          _|          _|   _|   _|   _|_|_|   _|      _|            _|         "
+echo "       _|          _|          _|    _|  _|            _|      _|            _|         "
+echo "       _|          _|          _|     _| _|             _|    _|             _|         "
+echo "   _|_|_|          _|          _|      _|_|              _|_|_|         _|_|_|_|_|_|    "
+echo
+echo "  An innovative user interface (UI) that accepts the following inputs that are present in a CSV file:"
+echo "  1] RTL netlist 2] Library files for fast and slow scenarios. 3] SDC constraint file"
+echo "  It then outputs 1] Synthesized netlist 2] Pre-layout timing report."
+echo "  OpenTimer is used for generating timing reports and Yosys is used to perform synthesis."
+echo "  The UI is designed and maintained by Niharika Kummithi (Physical Design Engineer)"
+echo "  For any queries or bugs, Please drop a mail to - niharika.kummithi98@gmail.com"
+echo
+echo
+#Code to handle the scenario where user does not give any file, does not give .csv file, gives more than one file as argument
+
+if [ $# -eq 0 ]
+then
+	echo "Info: Please provide a CSV file"
+	exit 1
+elif [ $# -gt 1 ]
+then
+	echo "Info: Please provide only 1 CSV file"
+	exit 1
+else
+	if [[ $1 != *.csv  &&  $1 != "-help" ]]
+	then
+		echo "Info: Please provide a .csv format file"
+		exit 1
+	fi
+fi
+# Code to check if the .csv file is present in directory or not, and also to display information for -help argument.
+if [ ! -f $1 ] || [ $1 == "-help" ]
+then
+	if [ $1 != "-help" ]
+	then
+		echo "Error: The file $1 is not found in current directory."
+		exit 1
+	else
+		echo "USAGE: ./synui <csv_file>"
+		echo
+		echo " where <csv file> consists of 2 columns, below keyword being in 1st column and is Case Sensitive. Please request Niharika for sample csv file."
+		echo
+		echo " <Design Name> is the name of top level module."
+		echo
+		echo " <Output Directory> is the name of output directory where you want to dump synthesis script, synthesized netlist and timing reports."
+		echo
+		echo " <Netlist Directory> is the name of directory where all RTL netlist are present."
+		echo
+		echo " <Early Library Path> is the file path of the early cell library to be used for STA."
+		echo
+		echo " <Late Library Path> is file path of the late cell library to be used for STA."
+		echo
+		echo " <Constraints file> is csv file path of constraints to be used for STA."
+		exit 1
+	fi
+else
+	#Code to execute if the proper CSV file exists.
+	echo "Info: CSV file accepted"
+	tclsh synui.tcl $1
+fi
+
