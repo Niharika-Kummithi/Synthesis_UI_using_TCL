@@ -119,7 +119,7 @@ In my command ***synui***, I have implemented a total of *5 general scenarios* f
 ![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/8ea9088c-de2f-4446-a714-9061fee7c521)
 
 
-## Day 2 - Variable Creation and Processing Constraints from CSV (06/11/2023)
+## Day 2 - Variable Creation and Processing Constraints from CSV (02/11/2023)
 
 Day 2's task is to create variables, check file/directory existence, and convert constraints csv file to format[1] and SDc format. This is done by writing the code in *synui.tcl*.
 
@@ -288,7 +288,7 @@ puts "OUTPUTS starting row in CSV file = $outputs_start "
 ![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/b2dc950e-8ea7-40ab-b448-cf62ab7ae13a)
 
 
-## Day 3 - Processing Clock and Input Constraints from CSV and dumping SDC (07/11/2023)
+## Day 3 - Processing Clock and Input Constraints from CSV and dumping SDC (03/11/2023)
 
 The assignment for Day 3 is to essentially to analyze clock and input constraints in a CSV file and output SDC commands into a .sdc file with the actual processed data. In addition to a number of matrix search algorithms, it also uses an algorithm to distinguish between inputs that are buses and bits.
 
@@ -801,7 +801,7 @@ if { $error_flag } {
 
 
 
-## Day 5 - Advanced Scripting Techniques and Quality of Results (QoR) Generation (27/08/2023)
+## Day 5 - Advanced Scripting Techniques and Quality of Results (QoR) Generation (05/11/2023)
 
 The activities for day five include running Yosys' main synthesis, learning about and using procedures at the application level, creating commands, and writing the files needed for the OpenTimer tool, like .conf,.spef, and timing Create an OpenTimer script, launch an OpenTimer STA, and gather the information needed to create a QoR.final step is to print the gathered data in a tool-standard QoR output format using the results file that was created during the OpenTimer STA run.
 
