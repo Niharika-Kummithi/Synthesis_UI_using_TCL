@@ -649,10 +649,10 @@ The basic Yosys script *memory.ys* to run this and obtain a gate-level netlist a
 *Script*
 
 ```tcl
-# Reding the library
+# Reading the library
 read_liberty -lib -ignore_miss_dir -setattr blackbox /home/kunalg/Desktop/work/openmsp430/openmsp430/osu018_stdcells.lib
 # Reading the verilog
-read_verilog memory.v
+read_verilog verilog/memory.v
 synth top memory
 splitnets -ports -format ___
 dfflibmap -liberty /home/kunalg/Desktop/work/openmsp430/openmsp430/osu018_stdcells.lib
@@ -666,39 +666,47 @@ clean
 write_verilog memory_synth.v
 # Representation of netlist with it's components
 show
+~     
 ```
 
 The output view of netlist from the code is shown below.
 
-![Screenshot (267)](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/82137c89-b8f5-4b98-996b-e7e6fe6516a1)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/bc471dc9-7abf-4bf7-98b0-6b9d0fcfec5e)
+
 
 *Memory write process explained in following images using truth table*
 
 Basic illustration of the write process
 
-![Screenshot (268)](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/44d4b869-a861-41c6-90a0-4d2e9a0ff38c)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/be50e508-dd21-4e4f-b884-ebbf5b738ebe)
+
 
 Before first rising edge of the clock
 
-![Screenshot (272)](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/7c1cbdc0-ccbe-4010-ae5d-2af6317d7459)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/5a17e6fc-ca77-43f6-87c0-9fb9aa82cc5e)
+
 
 After first rising edge of the clock - write process done
 
-![Screenshot (273)](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/f6d57546-e60e-4cfe-bf20-601d5962d000)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/0a241feb-b155-46e6-bf64-c7923542074c)
+
 
 *Memory read process explained in following images using truth table*
 
 Basic illustration of the read process
 
-![Screenshot (269)](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/2dff99ae-b568-4b7a-93ac-78cfa112a9ed)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/5bb227cd-e216-4b08-bec3-cfb3b8c58b99)
+
 
 After first rising edge and before second rising edge of the clock
 
-![Screenshot (274)](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/4940be06-9546-4652-908d-44cd96050d6a)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/ed9602bd-ca76-431b-b446-0b9623030087)
+
 
 After second rising edge of the clock - read process done
 
-![Screenshot (275)](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/ab0a4c9c-fd2b-48ee-b9ff-d068c2bdfbf1)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/0ca4528d-c96c-4165-b173-2b6d0025423b)
+
 
 #### Hierarchy check script dumping
 
@@ -707,8 +715,9 @@ I have successfully written the code for dumping the hierarchy check script. The
 *Code*
 
 ```tcl
+######################################## Day 4 part 2 #######################################
 # Hierarchy Check
-# ---------------
+#############################################################################################
 puts "\nInfo: Creating hierarchy check script to be used by Yosys"
 set data "read_liberty -lib -ignore_miss_dir -setattr blackbox ${Late_Library_Path}"
 set filename "$Design_Name.hier.ys"
@@ -716,21 +725,24 @@ set fileId [open $Output_Directory/$filename "w"]
 puts -nonewline $fileId $data
 set netlist [glob -dir $Netlist_Directory *.v]
 foreach f $netlist {
+	set data $f
 	puts -nonewline $fileId "\nread_verilog $f"
+	puts "\nInfo: Netlist being read for user debug: $f" 
 }
 puts -nonewline $fileId "\nhierarchy -check"
 close $fileId
+
+
 ```
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 16-02-41](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/a035dbe3-9271-4d9d-a7d4-56a6f962fdaf)
-![Screenshot from 2023-08-29 16-03-08](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/531faa6f-e51d-4ff5-a289-9eb39240db04)
-![Screenshot from 2023-08-29 16-03-26](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/6bcd71ba-1063-4d38-b822-78af29e8aa94)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/b24d8c13-a241-4249-910e-6384823b58a4)
 
 *openMSP430.hier.ys*
 
-![Screenshot from 2023-08-29 16-04-58](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/98b04685-79dc-44b2-9ba4-c400db8548d6)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/7afcf456-19f3-4f74-85fe-049ed24b4b69)
+
 
 #### Hierarchy Check Run & Error Handling
 
@@ -740,8 +752,10 @@ I have successfully written the code for hierarchy check error handling in case 
 
 ```tcl
 # Hierarchy check error handling
+# Hierarchy check error handling done to see any errors popping up in above script.
 # Running hierarchy check in yosys by dumping log to log file and catching execution message
 set error_flag [catch {exec yosys -s $Output_Directory/$Design_Name.hier.ys >& $Output_Directory/$Design_Name.hierarchy_check.log} msg]
+puts "Errfor flag value for user debug: $error_flag"
 if { $error_flag } {
 	set filename "$Output_Directory/$Design_Name.hierarchy_check.log"
 	# EDA tool specific hierarchy error search pattern
@@ -757,30 +771,39 @@ if { $error_flag } {
 	}
 	close $fid
 	puts "\nInfo: Please find hierarchy check details in '[file normalize $Output_Directory/$Design_Name.hierarchy_check.log]' for more info. Exiting..."
-	exit
+	
 } else {
 	puts "\nInfo: Hierarchy check PASS"
 	puts "\nInfo: Please find hierarchy check details in '[file normalize $Output_Directory/$Design_Name.hierarchy_check.log]' for more info"
 }
+
 ```
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 16-10-14](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/bbf9a540-8836-4d2d-84b5-b29586d7f340)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/bd06b80d-8a87-487c-86bb-372e9159931a)
+
 
 *openMSP430.hierarchy_check.log*
 
-![Screenshot from 2023-08-29 16-10-54](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/c8588d8f-4003-4496-be2f-11043647f3b2)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/346eb0bc-cc10-404b-8071-be43765c46f6)
 
-![Screenshot from 2023-08-29 16-13-12](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/028cb5d6-0324-4e08-844f-062cd8dc7505)
+*Change module name by adding _vsd to check error is coming or not.*
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/6c93a313-443a-4c7f-879e-e996936173fc)
+
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/c4400400-ab35-4341-b83a-0c1b02708914)
 
 *openMSP430.hierarchy_check.log*
 
-![Screenshot from 2023-08-29 16-14-22](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/7d0f3e55-95a1-421d-a099-cb13b330c4f2)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/c5666238-73ff-4af3-a94e-bf7079c4245c)
+
+
 
 ## Day 5 - Advanced Scripting Techniques and Quality of Results (QoR) Generation (27/08/2023)
 
-Day 5's tasks are to run main synthesis in Yosys, learn about procs and use them at the application level, create commands, and write necessary files required for the OpenTimer tool, such as .conf - .spef - .timing, write an OpenTimer script, run an OpenTimer STA, and collect the required data to form QoR from .results file generated from OpenTimer STA run and finally print the collected data in a tool-standard QoR output format.
+The activities for day five include running Yosys' main synthesis, learning about and using procedures at the application level, creating commands, and writing the files needed for the OpenTimer tool, like .conf,.spef, and timing Create an OpenTimer script, launch an OpenTimer STA, and gather the information needed to create a QoR.final step is to print the gathered data in a tool-standard QoR output format using the results file that was created during the OpenTimer STA run.
 
 ### Implementation
 
@@ -793,7 +816,11 @@ I have successfully written the code for the main Yosys synthesis script .ys fil
 *Code*
 
 ```tcl
-# Main Synthesis Script
+##################################################################################################################################################
+######################################################## Day 5 ###################################################################################
+####################################################### Sub task 1 ###############################################################################
+##################################################################################################################################################
+# Main Synthesis Script for yosys
 # ---------------------
 puts "\nInfo: Creating main synthesis script to be used by Yosys"
 set data "read_liberty -lib -ignore_miss_dir -setattr blackbox ${Late_Library_Path}"
@@ -813,17 +840,18 @@ puts -nonewline $fileId "\nclean -purge\niopadmap -outpad BUFX2 A:Y -bits\nopt\n
 puts -nonewline $fileId "\nwrite_verilog $Output_Directory/$Design_Name.synth.v"
 close $fileId
 puts "\nInfo: Synthesis script created and can be accessed from path $Output_Directory/$Design_Name.ys"
+
 ```
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 16-21-48](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/8ff84ce4-26af-4a01-93b4-d435bbfd767c)
-![Screenshot from 2023-08-29 16-22-21](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/83af9314-c349-45cb-bde2-be5d6035d3a1)
-![Screenshot from 2023-08-29 16-22-40](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/82881cc7-b27f-4a39-a04b-f5dfdd847649)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/92e9b582-ef79-4db0-af96-2de93c4bdcd2)
+
 
 *openMSP430.ys*
 
-![Screenshot from 2023-08-29 16-23-16](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/6273dd9c-4ef4-4e9a-beb7-f7e6a0606943)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/3c9a5541-913a-495a-88f4-32aebb38a688)
+
 
 #### Running main synthesis script & error handling
 
@@ -832,9 +860,9 @@ I have successfully written the code for running the main Yosys synthesis script
 *Code*
 
 ```tcl
-puts "\nInfo: Running synthesis..........."
+puts "\nInfo: Running synthesis......."
 # Main synthesis error handling
-# Running main synthesis in yosys by dumping log to log file and catching execution message
+# Running main synthesis in yosys by dumping logs to the log directory and catching execution message
 if { [catch {exec yosys -s $Output_Directory/$Design_Name.ys >& $Output_Directory/$Design_Name.synthesis.log} msg] } {
 	puts "\nError: Synthesis failed due to errors. Please refer to log $Output_Directory/$Design_Name.synthesis.log for errors. Exiting...."
 	exit
@@ -842,16 +870,30 @@ if { [catch {exec yosys -s $Output_Directory/$Design_Name.ys >& $Output_Director
 	puts "\nInfo: Synthesis finished successfully"
 }
 puts "\nInfo: Please refer to log $Output_Directory/$Design_Name.synthesis.log"
+
 ```
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 16-31-45](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/fd204cbb-9a76-4a4b-a0c9-e2bf0924396b)
-![Screenshot from 2023-08-29 16-35-18](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/c5df53d3-c644-43c5-9f07-f84215615487)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/672babce-8bc3-40dd-aa12-18caaa73a2aa)
+
 
 *openMSP430.synthesis.log*
 
-![Screenshot from 2023-08-29 16-36-16](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/8ca12680-9570-4cbb-a69d-662f3d31705d)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/4cbbc0d3-6a88-4d55-b32a-72fbd5df2d95)
+
+*openMSP430.synth.v*
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/91034e4c-600c-4518-9408-1f5aa3887290)
+
+*Error handling*
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/2a93510f-4110-4057-ab0c-f4e759130474)
+
+*Log file for error handling*
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/de9aae64-7e37-4b00-84eb-2bdeedcfa5bb)
+
 
 #### Editing .synth.v to be usable by OpenTimer
 
@@ -860,8 +902,9 @@ I have successfully written the code to edit the main synthesis output netlist .
 *Code*
 
 ```tcl
-# Editing .synth.v to be usable by Opentimer
-# ------------------------------------------
+############################################## Editing .synth.v to be usable by Opentimer #######################################################
+
+puts "\nInfo: Removing '*' and '\\' from netlist"
 set fileId [open /tmp/1 "w"]
 puts -nonewline $fileId [exec grep -v -w "*" $Output_Directory/$Design_Name.synth.v]
 close $fileId
@@ -880,19 +923,22 @@ puts "\nPath: $Output_Directory/$Design_Name.final.synth.v"
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 16-40-59](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/df6c6458-b390-4a5a-957a-a516e9917042)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/a9c0a733-3111-408b-8ee8-487f839a141f)
+
 
 *openMSP430.synth.v*
 
-![Screenshot from 2023-08-29 16-45-19](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/6995d59c-89fb-460f-9aa1-0ba99ffa55e3)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/8f028452-f788-4a7c-ba2b-0784250d55dd)
+
 
 */tmp/1*
 
-![Screenshot from 2023-08-29 16-45-38](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/13c74231-6309-4e7c-9291-d7debabdd5f8)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/e0a31938-408c-475b-9f9f-3138f28b2929)
 
 *openMSP430.final.synth.v*
 
-![Screenshot from 2023-08-29 16-46-26](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/8f1f5555-58b9-4053-af9f-aa1b075c6446)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/9fcee46b-5004-41f0-9925-e17632b0944e)
+
 
 #### World of Procs (TCL Procedure)
 
@@ -906,7 +952,6 @@ This proc redirects the 'stdout' screen log to the file in the proc's argument.
 
 ```tcl
 #!/bin/tclsh
-
 # proc to redirect screen log to file
 proc reopenStdout {file} {
     close stdout
@@ -924,27 +969,39 @@ This proc outputs multiple threads of the CPU usage command required for the Ope
 #!/bin/tclsh
 
 proc set_multi_cpu_usage {args} {
-        array set options {-localCpu <num_of_threads> -help "" }
-        while {[llength $args]} {
-                switch -glob -- [lindex $args 0] {
-                	-localCpu {
-				set args [lassign $args - options(-localCpu)]
-				puts "set_num_threads $options(-localCpu)"
-			}
-                	-help {
-				set args [lassign $args - options(-help) ]
-				puts "Usage: set_multi_cpu_usage -localCpu <num_of_threads> -help"
-				puts "\t-localCpu - To limit CPU threads used"
-				puts "\t-help - To print usage"
-                      	}
-                }
-        }
+        array set options {-localCpu <num_of_threads> -help "" }
+        foreach {switch value} [array get options] {
+       # puts "Option $switch is $value"
+        }
+        while {[llength $args]} {
+       # puts "llength is [llength $args]"
+       # puts "lindex 0 of \"$args\" is [lindex $args 0]"
+                switch -glob -- [lindex $args 0] {
+                -localCpu {
+                           #puts "old args is $args"
+                           set args [lassign $args - options(-localCpu)]
+                           #puts "new args is \"$args\""
+                           puts "set_num_threads $options(-localCpu)"
+                          }
+                -help {
+                           #puts "old args is $args"
+                           set args [lassign $args - options(-help) ]
+                           #puts "new args is \"$args\""
+                           puts "Usage: set_multi_cpu_usage -localCpu <num_of_threads> -help"
+                           puts "\t-localCpu - To limit number of threads used"
+                           puts "\t-help - To print details of proc"
+                      }
+                }
+        }
 }
+
+#set_multi_cpu_usage -localCpu 5 -help
 ```
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 16-53-58](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/21a2a36c-c1d8-43d8-88b3-a01954c890d8)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/b1ef0281-3b72-42cd-86fa-ba4f3f99691b)
+
 
 ##### read_lib.proc
 
@@ -954,7 +1011,6 @@ This proc outputs commands to read early and late libraries required for the Ope
 
 ```tcl
 #!/bin/tclsh
-
 proc read_lib args {
 	# Setting command parameter options and its values
 	array set options {-late <late_lib_path> -early <early_lib_path> -help ""}
@@ -1008,7 +1064,6 @@ Initially, the proc takes the SDC file as an input argument or parameter and pro
 
 ```tcl
 #!/bin/tclsh
-
 proc read_sdc {arg1} {
 
 # 'file dirname <>' to get directory path only from full path
@@ -1043,13 +1098,22 @@ close $tmp_file
 
 *Screenshots*
 
+*openMSP430.sdc*
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/3a242e4d-cb59-4f72-af38-630b276966b4)
+
+
 */tmp/1*
 
-![Screenshot from 2023-08-29 17-11-08](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/328687aa-0faa-41dd-8d9c-df4a8c504711)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/c7589b9c-a500-43f8-a7b9-d4a478d36fb0)
+
+
 
 */tmp/3*
 
-![Screenshot from 2023-08-29 17-11-40](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/4e63234f-c254-4c1c-8574-0d5570ce55b0)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/1764cb53-d0e5-49c1-9f83-a9ed20b1fd73)
+
+
 
 ###### Converting 'set_clock_latency' constraints
 
@@ -1087,11 +1151,13 @@ close $tmp2_file
 
 */tmp/2*
 
-![Screenshot from 2023-08-29 17-23-07](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/768611ac-19fc-4fa5-8f12-31c26085682b)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/bf48ccc1-c88f-418d-8c5f-c0733d99a65a)
+
+
 
 */tmp/3*
 
-![Screenshot from 2023-08-29 17-23-57](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/ee297383-a993-4623-9ada-f31b01be1239)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/3194d29b-396a-455e-8326-c3402b41faf7)
 
 ###### Converting 'set_clock_transition' constraints
 
@@ -1129,11 +1195,13 @@ close $tmp2_file
 
 */tmp/2*
 
-![Screenshot from 2023-08-29 17-25-25](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/0ef0d12c-1add-4504-9fd2-4b805af5a8e1)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/f79988e7-6d93-47b1-bfd6-5f3fd53fcd4c)
+
 
 */tmp/3*
 
-![Screenshot from 2023-08-29 17-25-45](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/4e4dcd61-1b03-422f-8ff0-bf6a778e4acc)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/a1b77860-8270-4471-b2a3-2c15745ce35f)
+
 
 ###### Converting 'set_input_delay' constraints
 
@@ -1170,11 +1238,12 @@ close $tmp2_file
 
 */tmp/2*
 
-![Screenshot from 2023-08-29 17-27-29](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/b19e68f3-57a1-42d4-90fc-ed2a9e058158)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/fc114f66-e050-4ae1-bcda-f3030c93db72)
+
 
 */tmp/3*
 
-![Screenshot from 2023-08-29 17-27-43](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/10003b27-2e09-45bf-9bee-da0d0ef6bd50)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/ec6e8736-91c2-4dec-98b6-3fd7ac0861e5)
 
 ###### Converting 'set_input_transition' constraints
 
@@ -1212,11 +1281,13 @@ close $tmp2_file
 
 */tmp/2*
 
-![Screenshot from 2023-08-29 17-29-37](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/956c7538-92c0-49b6-9fce-5cd6d418dd41)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/f836a956-ef06-499e-9d2a-118306801fb6)
+
 
 */tmp/3*
 
-![Screenshot from 2023-08-29 17-29-58](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/da17d4f2-4855-4a23-81fd-566500f29926)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/ca085ba4-de55-4014-9e8b-90acd02d93f0)
+
 
 ###### Converting 'set_output_delay' constraints
 
@@ -1254,11 +1325,13 @@ close $tmp2_file
 
 */tmp/2*
 
-![Screenshot from 2023-08-29 17-31-42](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/42b174e7-dc05-42ae-ba7e-390986e49f3d)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/884f248a-32ef-492f-a3ea-7d8763be136a)
+
 
 */tmp/3*
 
-![Screenshot from 2023-08-29 17-32-11](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/49185da9-2642-4b6a-a24a-c12fc8ef1548)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/17393f00-8ab6-419e-85cb-249622a783cd)
+
 
 ###### Converting 'set_load' constraints
 
@@ -1296,13 +1369,11 @@ close $timing_file
 
 *Screenshots*
 
-*/tmp/2*
-
-![Screenshot from 2023-08-29 17-43-58](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/9540204e-8cc1-4438-8cf7-6848f7f1a02a)
 
 */tmp/3*
 
-![Screenshot from 2023-08-29 17-44-25](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/42b14a5f-3de4-4b02-89b4-c6219cb232f5)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/6579b1df-32f0-4b20-bd35-297025c163ab)
+
 
 ###### Expanding the bussed input and output ports
 
@@ -1341,15 +1412,17 @@ puts "set_timing_fpath $sdc_dirname/$sdc_filename.timing"
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 17-49-32](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/7836a33e-dc40-4c7a-bc60-74408ef15260)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/0c8a4cd2-0d6e-48ca-ab08-64c3c3d2ffa3)
+
 
 */tmp/3*
 
-![Screenshot from 2023-08-29 17-51-29](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/483ee333-38f4-4047-a2dc-d8e7b9c2c833)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/76606c63-c173-4b3b-8c3c-aaee54290edc)
 
 *openMSP430.timing*
 
-![Screenshot from 2023-08-29 17-52-01](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/5c76e83e-6855-4d13-bad8-a662da9ff265)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/c6a209eb-c3ba-4bcc-a07a-e0f6df4c68b6)
+
 
 #### Using the procs to write .conf
 
@@ -1358,12 +1431,16 @@ I have successfully written the code to use these procs on an application level 
 *Code*
 
 ```tcl
+############################################# Calling procs needed to generate .timing file ###################################################
+## Editing .synth.v to be usable by Opentimer
+# ------------------------------------------
 # Preparation of .conf for OpenTimer STA
 # --------------------------------------
 # Procs used below \/
 puts "\nInfo: Timing Analysis Started...."
 puts "\nInfo: Initializing number of threads, libraries, sdc, verilog netlist path..."
-# Sourcing required procs
+puts " Invoking required procs"
+puts "reopenStdout.proc \nset_multi_cpu_usage,proc \nread_lib.proc \nread_verilog.proc \nread_sdc.prc"
 source /home/vsduser/vsdsynth/procs/reopenStdout.proc
 source /home/vsduser/vsdsynth/procs/set_multi_cpu_usage.proc
 source /home/vsduser/vsdsynth/procs/read_lib.proc
@@ -1379,18 +1456,23 @@ read_sdc $Output_Directory/$Design_Name.sdc
 # Reopening 'stdout' to bring back screen log
 reopenStdout /dev/tty
 # Closing .conf file opened by 'reopenStdout' proc
-close $Output_Directory/$Design_Name.conf
+#close $Output_Directory/$Design_Name.conf
+#puts "closed .conf and redirected to stdout"
 ```
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 18-18-15](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/59692da1-15c3-4f26-9b16-d994df79433f)
-![Screenshot from 2023-08-29 18-18-33](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/4265a870-cd60-4061-8f29-c5ac29fbb5f7)
-![Screenshot from 2023-08-29 18-18-42](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/29ccd10a-42e5-43aa-9222-f540e08db139)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/bcedffb1-c9ef-4484-b6d4-28aa9de0ad78)
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/051c9b4e-25ec-4f9a-8827-e5809a14a14d)
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/63a7496f-d602-4016-bf05-114dcf62fd92)
+
 
 *openMSP430.conf*
 
-![Screenshot from 2023-08-29 18-19-19](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/da7f3c0c-85aa-4fa0-99fe-d2bcd39b7aa9)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/4ad13ac7-9af5-4506-a7a7-8d4aec65aac1)
+
 
 #### Preparation of rest of .conf & .spef files for OpenTimer STA
 
@@ -1399,8 +1481,8 @@ I have successfully written the code to write .spef *with the current date and t
 *Code*
 
 ```tcl
-# Preparation of .conf & .spef for OpenTimer STA
-# ----------------------------------------------
+################################################ SPEF and CONF creation #########################################################################
+
 # Continue to write .conf and also write a .spef
 # Writing .spef
 set enable_prelayout_timing 1
@@ -1432,22 +1514,23 @@ puts $conf_file "report_timer "
 puts $conf_file "report_wns "
 puts $conf_file "report_worst_paths -numPaths 10000 "
 close $conf_file
+
 ```
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 18-47-51](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/f1b2f647-be3e-4efe-a094-8932067b264d)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/b1334d67-660a-43ae-b27e-ce9209c685cf)
+
 
 *openMSP430.spef*
 
-![Screenshot from 2023-08-29 18-49-01](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/6f14f6a6-6a5a-4967-aa8b-bf7f7514a507)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/c70532a4-85c0-42ea-bcdf-2275d51afacf)
+
 
 *openMSP430.conf*
 
-![Screenshot from 2023-08-29 19-23-02](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/14233d49-fa1a-43be-95da-4f68e3002c7d)
-<!---
-![Screenshot from 2023-08-29 18-49-34](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/bc1a6e67-1962-4412-ade9-3519e78efb97)
--->
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/8fc10454-7d04-4756-ab82-4d30cd882e59)
+
 
 #### STA using OpenTimer
 
@@ -1456,11 +1539,12 @@ I have successfully written the code to run STA on OpenTimer and capture its run
 *Code*
 
 ```tcl
-# Static Timing Analysis using OpenTimer
-# --------------------------------------
+################################# Starting Timing Analysis ##########################################################
+#
+#
 # Running STA on OpenTimer and dumping log to .results and capturing runtime
 set tcl_precision 3
-set time_elapsed_in_us [time {exec /home/kunalg/Desktop/tools/opentimer/OpenTimer-1.0.5/bin/OpenTimer < $Output_Directory/$Design_Name.conf >& $Output_Directory/$Design_Name.results}]
+set time_elapsed_in_us [time {exec /home/vsduser/OpenTimer-1.0.5/bin/OpenTimer < $Output_Directory/$Design_Name.conf >& $Output_Directory/$Design_Name.results}]
 set time_elapsed_in_sec "[expr {[lindex $time_elapsed_in_us 0]/1000000}]sec"
 puts "\nInfo: STA finished in $time_elapsed_in_sec seconds"
 puts "\nInfo: Refer to $Output_Directory/$Design_Name.results for warnings and errors"
@@ -1468,15 +1552,16 @@ puts "\nInfo: Refer to $Output_Directory/$Design_Name.results for warnings and e
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 19-25-37](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/f1494ffb-bdfb-4e85-bb48-6a323c4babd2)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/c07c7094-7a60-4cf4-b542-53db64d5ca1a)
+
 
 *openMSP430.results*
 
-![Screenshot from 2023-08-29 19-26-43](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/4e8d4d2b-1f96-4822-9257-58e37a66593f)
-<!---
-![Screenshot from 2023-08-29 19-00-18](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/32eaa113-437c-40b9-b08e-ca4e1b263acb)
-![Screenshot from 2023-08-29 19-00-58](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/094ed944-018c-4428-bc1f-f95cdc425e05)
--->
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/753ad960-966d-49eb-9589-e6e2ab9b571f)
+
+*Results*
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/2a5e4df0-514c-4116-92f5-8c981dbe7e8a)
+
 
 #### Data collection from .results file and other sources for QoR
 
@@ -1485,6 +1570,9 @@ I have successfully written the code to collect all required data for specific c
 *Code*
 
 ```tcl
+#################################### RESULTS ########################################################################
+#
+
 # Find worst output violation
 set worst_RAT_slack "-"
 set report_file [open $Output_Directory/$Design_Name.results r]
@@ -1536,7 +1624,7 @@ set worst_negative_hold_slack "-"
 set report_file [open $Output_Directory/$Design_Name.results r]
 set pattern {Hold}
 while { [gets $report_file line] != -1 } {
-	if {[regexp $pattern $line]} { 
+	if {[regexp $pattern $line]} {
 		set worst_negative_hold_slack "[expr {[lindex $line 3]/1000}]ns"
 		break
 	} else {
@@ -1549,7 +1637,7 @@ close $report_file
 set report_file [open $Output_Directory/$Design_Name.results r]
 set count 0
 while {[gets $report_file line] != -1} {
-	incr count [regexp -all - $pattern $line]
+	incr count [regexp -all -- $pattern $line]
 }
 set Number_of_hold_violations $count
 close $report_file
@@ -1572,11 +1660,21 @@ set end_time [clock clicks -microseconds]
 
 # Setting total script runtime to 'time_elapsed_in_sec' variable
 set time_elapsed_in_sec "[expr {($end_time-$start_time)/1000000}]sec"
+puts "\nInfo: Design Name = $Design_Name"
+puts "\nInfo: Worst RAT slack = $worst_RAT_slack"
+puts "\nInfo: Number of output violations = $Number_output_violations"
+puts "\nInfo: Worst negative setup slack = $worst_negative_setup_slack"
+puts "\nInfo: Number of setup violation = $Number_of_setup_violations"
+puts "\nInfo: Worst Negative Hold Slack = $worst_negative_hold_slack"
+puts "\nInfo: Number of Hold Violations = $Number_of_hold_violations"
+puts "\nInfo: Number of Instances = $Instance_count"
+puts "\nInfo: Time elapsed = $time_elapsed_in_sec"
 ```
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 19-37-06](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/d8186e62-3030-4d0e-a545-887415b77563)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/ee3793de-84e3-454d-b0e5-b545006415f3)
+
 
 #### QoR (Quality of Results) Generation
 
@@ -1587,7 +1685,7 @@ I have successfully written the code for QoR generation. The basic code and scre
 ```tcl
 # Quality of Results (QoR) generation
 puts "\n"
-puts "                                                           ****PRELAYOUT TIMING RESULTS****\n"
+puts "                                                           ****PRELAYOUT TIMING RESULTS_SYNUI****\n"
 set formatStr {%15s%14s%21s%16s%16s%15s%15s%15s%15s}
 puts [format $formatStr "-----------" "-------" "--------------" "---------" "---------" "--------" "--------" "-------" "-------"]
 puts [format $formatStr "Design Name" "Runtime" "Instance Count" "WNS Setup" "FEP Setup" "WNS Hold" "FEP Hold" "WNS RAT" "FEP RAT"]
@@ -1597,11 +1695,22 @@ foreach design_name $Design_Name runtime $time_elapsed_in_sec instance_count $In
 }
 puts [format $formatStr "-----------" "-------" "--------------" "---------" "---------" "--------" "--------" "-------" "-------"]
 puts "\n"
+
 ```
 
 *Screenshots*
 
-![Screenshot from 2023-08-29 19-47-24](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/36f9a31d-56e8-4fdb-9fd1-231bbd11800a)
-![Screenshot from 2023-08-29 19-47-53](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/2f937ddf-ef8d-46ea-8e08-15272fab4944)
-![Screenshot from 2023-08-29 19-48-16](https://github.com/fayizferosh/yosys-tcl-ui-report/assets/63997454/630a39fe-710e-44aa-85d5-29f19e833734)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/3b6545f6-0e5e-4f94-8be5-80b977ea1f0d)
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/ff039ac4-ce98-4f38-9abb-ab61b92a644e)
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/6f59d8b3-aa49-4d45-a0cd-2253783fbc4d)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/0563fa71-d9fc-4e0c-b034-fbfb976ab873)
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/0f4493ad-1fdf-482e-99bb-2ae6ee9f8adf)
+
+![image](https://github.com/Niharika-Kummithi/Synthesis_UI_using_TCL/assets/149615846/8d38ec9c-eeea-494c-9e0e-5e1f02dfb940)
+
+
+
+
 
