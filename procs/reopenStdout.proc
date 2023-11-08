@@ -1,0 +1,6 @@
+#!/bin/tclsh
+proc reopenStdout {file} {
+    close stdout
+    open $file w       
+}
+
